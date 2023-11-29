@@ -54,6 +54,7 @@ Param(
 )
 $ThisScriptRequiresExtraParameters = $false
 
+# Set this to a full path name and make sure the path is created and writable
 $logfile = 'PSUsageTestScript.log'
 
 

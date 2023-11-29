@@ -46,7 +46,10 @@ Param(
     [Parameter(Mandatory = $true)][string]$username,
     [Parameter(Mandatory = $true)][string]$logonUserName
 )
+
+# Set this to a full path name and make sure the path is created and writable
 $logfile = 'PowershellTarget.log'
+
 if ($null -eq $action -or $null -eq $address -or $null -eq $username -or $null -eq $logonUserName) {
     #
     # Note that the phrase "Missing arguments" is recognized by PowershellPrompts.ini and the [transitions] returns a specifec error to the CPM
