@@ -3,7 +3,7 @@
     PowershellTarget.ps1 - Cyberark CPM Plugin Target Template Script
 
     .DESCRIPTION
-    Run by CyberArk.TPC.exe, passed the action, username, address and logonusername on the command line.  Communicates with TPC via STDIN and STDOUT, accepting
+    Run by CyberArk.TPC.exe, passed the taskname, username, address and logonusername on the command line.  Communicates with TPC via STDIN and STDOUT, accepting
     the credentials via Console::Readline()
 
     This is intended as a base template for Powershell-based Target Account Platforms.
@@ -21,27 +21,27 @@
     None.  STDOUT and STDERR are connected to TPC and are used to communicate.
 
     .EXAMPLE
-    bin\PowershellTest.ps1  -action 'verifypass' -address 'server.fqdn' -username 'localuser' -logonusername 'admin'
+    bin\PowershellTest.ps1  -taskname 'verifypass' -address 'server.fqdn' -username 'localuser' -logonusername 'admin'
 
     .EXAMPLE
     # Pre-Change logon test action
-    bin\PowershellTest.ps1  -action 'logon' -address 'server.fqdn' -username 'localuser' -logonusername 'admin'
+    bin\PowershellTest.ps1  -taskname 'logon' -address 'server.fqdn' -username 'localuser' -logonusername 'admin'
 
     .EXAMPLE
-    bin\PowershellTest.ps1  -action 'changepass' -address 'server.fqdn' -username 'localuser' -logonusername 'admin'
+    bin\PowershellTest.ps1  -taskname 'changepass' -address 'server.fqdn' -username 'localuser' -logonusername 'admin'
 
     .EXAMPLE
     # Pre-Reconcile logon test action
-    bin\PowershellTest.ps1  -action 'prereconcile' -address 'server.fqdn' -username 'localuser' -logonusername 'admin'
+    bin\PowershellTest.ps1  -taskname 'prereconcile' -address 'server.fqdn' -username 'localuser' -logonusername 'admin'
 
     .EXAMPLE
-    bin\PowershellTest.ps1  -action 'reconcilepass' -address 'server.fqdn' -username 'localuser' -logonusername 'admin'
+    bin\PowershellTest.ps1  -taskname 'reconcilepass' -address 'server.fqdn' -username 'localuser' -logonusername 'admin'
 
     .LINK
     https://github.com/jbalcorn/Cyberark-stuff
 #>
 Param(
-    [Parameter(Mandatory = $false)][string]$action,
+    [Parameter(Mandatory = $false)][string]$taskname,
     [Parameter(Mandatory = $true)][string]$address,
     [Parameter(Mandatory = $true)][string]$username,
     [Parameter(Mandatory = $true)][string]$logonUserName
@@ -50,10 +50,10 @@ Param(
 # Set this to a full path name and make sure the path is created and writable
 $logfile = 'PowershellTarget.log'
 
-if ($null -eq $action -or $null -eq $address -or $null -eq $username -or $null -eq $logonUserName) {
+if ($null -eq $taskname -or $null -eq $address -or $null -eq $username -or $null -eq $logonUserName) {
     #
     # Note that the phrase "Missing arguments" is recognized by PowershellPrompts.ini and the [transitions] returns a specifec error to the CPM
-    Write-Host "Missing arguments. Usage: PowershellTarget.ps1 -action <action> -address <address> -username <username> -logonuser <logonuser>"
+    Write-Host "Missing arguments. Usage: PowershellTarget.ps1 -taskname <action> -address <address> -username <username> -logonuser <logonuser>"
     return
 }
 
@@ -127,13 +127,13 @@ function Update-TargetPassword {
     return $returnMsg
 }
 
-New-LogEntry "PowershellTarget Called: $($action) $($address) $($username) $($logonusername)" 
+New-LogEntry "PowershellTarget Called: $($taskname) $($address) $($username) $($logonusername)" 
 
 
 Write-Host "Enter the logon password:"
 $logonpass = [Console]::ReadLine()
 
-if (isChangeAction -action $action) {
+if (isChangeAction -action $taskname) {
 
     Write-Host "Enter the old password:"
     $oldpass = [Console]::ReadLine()
@@ -148,12 +148,12 @@ $auth = New-Logon -address $address -username $logonUserName -logonPass $logonpa
 
 if ($auth) {
 	$returnMsg = 'Script Result: Success'
-	if (-Not (isVerifyAction($action))) {
+	if (-Not (isVerifyAction($taskname))) {
 		$returnMsg = Update-TargetPassword -auth $auth -address $address -username $username -oldpass $oldpass -newpass $newpass
 	}
 }
 else {
-    if (isVerifyAction($action)) {
+    if (isVerifyAction($taskname)) {
         # This forces a 2114 return code which will cause the CPM to schedule a reconciliation
         $returnMsg = "Invalid Username or Password specified."
     }
