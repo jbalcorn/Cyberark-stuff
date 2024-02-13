@@ -1,6 +1,10 @@
 # Cyberark-stuff
 Code templates and examples to work with Cyberark
-## PowershellTarget.ps1
+## PasswordManager
+
+Stuff for the CPM
+
+### PowershellTarget.ps1
 
 Use this to change a password on an appliance or similar using an API.   Set it as an imported Target platform that uses CyberArk.TPC.exe as the plugin. I used the UnixSSH platform as the base.
 
@@ -12,7 +16,7 @@ Use this to change a password on an appliance or similar using an API.   Set it 
 ![image](https://github.com/jbalcorn/Cyberark-stuff/assets/7225956/d50d4fc6-17d2-4cfe-beba-d071a4cd37e8)
 
 
-## PSUsage.....ps1
+### PSUsage.....ps1
 
 These are Dependent platforms that use the PSUsageProcess.ini and PSUsagePrompts.ini.  They only handle a 'changepass' action.  Unlike the Target Plaform script, these all use the same Platform PSScript which is then added as a usage to the needed Target platforms.
 
@@ -29,5 +33,12 @@ These are Dependent platforms that use the PSUsageProcess.ini and PSUsagePrompts
 
 ![image](https://github.com/jbalcorn/Cyberark-stuff/assets/7225956/d23b8c67-5677-4db0-95fb-321f16c02e8b)
 
+## PSM
 
+Stuff for the PSM
 
+### Get-ProperChromeDriver
+
+Script to download and install the correct ChromeDriver.exe to match the 32-bit chrome installed on the PSM.
+
+instructions originally from https://cyberark.my.site.com/s/article/How-to-update-Chrome-Driver-in-PSM-server
