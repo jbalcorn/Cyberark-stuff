@@ -39,6 +39,9 @@ Stuff for the PSM
 
 ### Get-ProperChromeDriver
 
+NOTE: It was only after I wrote and debugged this that I found that there's already a tool on the marketplace.  However, it only supports CyberArk 13.x
+https://cyberark.my.site.com/mplace/s/#a35Ht000000rjXlIAI-a39Ht000001kceVIAQ
+
 Script to download and install the correct ChromeDriver.exe to match the 32-bit chrome installed on the PSM.
 
 instructions originally from https://cyberark.my.site.com/s/article/How-to-update-Chrome-Driver-in-PSM-server
